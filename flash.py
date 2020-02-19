@@ -1,36 +1,33 @@
-import threading
-from time import sleep
-#from apa102_pi.colorschemes import colorschemes
 from apa102_pi.driver import apa102
-
+import time
 NUM_LED = 40
 
-class Flash(threading.Thread):
-  def __init__(self, seconds, brightness=50):
-      threading.Thread.__init__(self)
+class Flash():
+  def __init__(self):
 
-      self.seconds = seconds
-      self.brightness = brightness
-  def run(self):
-      print("Flash for seconds: ", self.seconds)
-
-      strip = apa102.APA102(num_led=NUM_LED,
+      self.strip = apa102.APA102(num_led=NUM_LED,
                 global_brightness=255,
                 mosi=10, sclk=11,
                 order='rgb')  # Initialize the strip
-      strip.clear_strip()
+  def on(self, brightness = 50):
+
+      self.strip.clear_strip()
       for led in range(0, NUM_LED):
-        strip.set_pixel_rgb(led, 0xFFFFFF, self.brightness)
+        self.strip.set_pixel_rgb(led, 0xFFFFFF, brightness)
+      self.strip.show()
 
-      strip.show()
-      sleep(self.seconds)
-      strip.clear_strip()
+  def off(self):
+      self.strip.clear_strip()
 
-      strip.cleanup();
-      print("Done! with flash")
+  def cleanup(self):   
+      self.strip.cleanup();
 
-#thread1 = Flash(2,70)
-#thread1.start()
+
+#f = Flash()
+#f.on(5)
+#time.sleep(2)
+#f.off()
+#f.cleanup()
 #print("Test")
 
       
